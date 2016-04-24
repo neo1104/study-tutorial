@@ -216,6 +216,79 @@ vagrant命令格式:
 ## 5 Vagrant 网络设置
 在 **2.2Vagrant的运行和启动**一节中我们介绍了NAT端口转发模式的网络配置，这里我们将介绍Vagrant的其余网络设置。
 
+### 5.1 私有网络(private network)配置
+Vagrant私有网络允许你通过私有网络地址来访问你的虚拟机。这种情况下，你的每个虚拟机都会被分配一个无法通过公网访问的私有网络地址。
+
+在同一个私有网断的虚拟机可以互相进行访问。私有网络地址的配置通常有以下两种配置方式。
+
+#### 5.1.1 DHCP
+配置私有网络最简单的方式就是通过DHCP服务来自动分配私有网络地址。
+	
+	Vagrant.configure("2") do |config|
+  		config.vm.network "private_network", type: "dhcp"
+	end
+
+上诉配置会自动从保留的IP地址空间分配一个IP地址给到虚拟机。 由于这个IP地址是动态分配的，可以通过vagrant ssh指令登入虚拟机，然后使用ifconfig(或类似命令)得到。
+
+#### 5.1.2 STATIC IP(静态IP)
+你也可以为虚拟机指定一个静态的IP地址。这使你可以使用一个固定的、已知的IP地址来来访问虚拟机。
+
+	Vagrant.configure("2") do |config|
+  		config.vm.network "private_network", ip: "192.168.50.4"
+	end
+	
+这里取决于使用者来确保指定的IP地址在同一网段内唯一。
+
+虽然你理论上可以指定你所喜欢的IP地址，但是你应该从保留私有地址网段来指定IP地址。这些IP地址被保证永远不会在外部网络被使用，且大部分的路由设置也保证其不会被外部网络锁访问。
+
+注意: 当配置私有地址时，vagrant会自动向底层所使用的provider(例如:VirtualBox)添加一个虚拟网卡，使宿主机与虚拟机在同一个私有网段。
+
+### 5.1 公有网络(public network)配置
+Vagrant的公有网络比私有网络(private network)要更为开放，其确切的实际意义在不同的底层provided各有不同。与私有网路不同的，Vagrant的公有网络可以被外网所访问。
+
+Vagrant的公有网络同样有两种配置方式。
+
+#### 5.1.1 DHCP
+配置公有网络最简单的方法仍然是DHCP。
+
+	Vagrant.configure("2") do |config|
+  		config.vm.network "public_network"
+	end
+
+上诉配置会自动从保留的IP地址空间分配一个IP地址给到虚拟机。 由于这个IP地址是动态分配的，可以通过vagrant ssh指令登入虚拟机，然后使用ifconfig(或类似命令)得到。
+
+在某些情况下要求DHCP服务默认的路由规则不能被改变，这个时候可以指定**use_dhcp\_assigned\_default\_route**选项。
+
+Vagrant.configure("2") do |config|
+    config.vm.network "public_network",
+    use_dhcp_assigned_default_route: true
+end
+
+#### 5.1.2 STATIC IP(静态IP)
+
+你可以手工来指定IP地址。
+
+	config.vm.network "public_network", ip: "192.168.0.17"
+
+
+如果你的宿主机存在多个网络接口，vagrant会要求你来选择需要被被桥接的网络接口。你也可以直接在配置文件通过**:bridge**来指定。
+
+	config.vm.network "public_network", bridge: "en1: Wi-Fi (AirPort)"
+	
+这里的接口名称必须完全匹配你宿主机上的接口名称。
+
+你可以指定一份接口列表:
+
+
+	config.vm.network "public_network", bridge: [
+  		"en1: Wi-Fi (AirPort)",
+  		"en6: Broadcom NetXtreme Gigabit Ethernet Controller",
+	]
+
+这个时候，列表中一个存在且可以被正常桥接的网络接口将会被使用。
+
+
+
 
 
 
