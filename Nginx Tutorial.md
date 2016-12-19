@@ -44,7 +44,7 @@ zlib是提供数据压缩用的函式库，由Jean-loup Gailly与Mark Adler所�
 禁止构建http重写模块。该模块需要pcre库支持
 #### 1.2.13 --without-http_proxy\_module
 禁止构建http代理模块
-#### 1.2.14 --with-http_ssl_module
+#### 1.2.14 --with-http\_ssl\_module
 启动构建https请求处理模块
 #### 1.2.15 --with-pcre=path
 指定pcre库源代码路径

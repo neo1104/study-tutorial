@@ -9,7 +9,7 @@ A(Address)记录是用来指定主机名(域名)对应的IPv4
 ### 子域名
 子域名道理等同二级域名，不过比二级域名更加延伸，比如我们继续扩展该域名的主机名，设置主机名为bbs.at,那么就可以建立一个三级域名：bbs.at.abc.com，当然也可以建立四级域名bbs.at.go.abc.com，五级域名bbs.at.go.home.abc.com……，依次类推，可以建立无限级别的域名，我们统称这些域名为顶级域名abc.com的子域名
 ### CNAME别名指向记录
-NAME (Canonical Name)记录，通常称别名指向。在这里，您可以定义一个主机别名，比如设置ftp.***.com，用来指向一个主机www.***.com,那么以后就可以用FTP.***.com来代替访问www.***.com了。
+CNAME (Canonical Name)记录，通常称别名指向。在这里，您可以定义一个主机别名，比如设置ftp.***.com，用来指向一个主机www.***.com,那么以后就可以用FTP.***.com来代替访问www.***.com了。
 
 CNAME解析时记录值只能填写另一个域名，即domain，而非网址；且CNAME记录与其它各类型的同名记录会存在冲突，不能有重复前缀的解析记录存在，例如您的域名为abc.com您设置了一条www.abc.com就不能再设置www.abc.com的其它类型的解析记录，否则会导致所有解析记录冲突不生效
 ### MX记录
